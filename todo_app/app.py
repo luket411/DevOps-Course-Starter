@@ -8,11 +8,12 @@ app = Flask(__name__)
 app.config.from_object(Config())
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    if request.method == "GET":
         items = [f"#{item['id']} {item['status']} - {item['title']}" for item in get_items()]
         return render_template('index.html', items=items)
-    elif request.method == "POST":
-        add_item(request.form.get('title'))
-        return redirect("/")
+
+@app.route('/', methods=['POST'])
+def create_item():
+    add_item(request.form.get('title'))
+    return redirect("/")
