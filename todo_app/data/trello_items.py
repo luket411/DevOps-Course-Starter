@@ -47,10 +47,16 @@ def parse_trello_response(response):
         List: cards on the trello board
     """
 
+    list_ids = session.get("list_ids", {})
     cards = []
 
     for trello_list in response:
         list_status = trello_list["name"]
+
+        if list_status not in list_ids:
+            list_ids[list_status] = trello_list["id"]
+            session["list_ids"] = list_ids
+
         for card in trello_list["cards"]:
             cards.append({
             "status":list_status,
