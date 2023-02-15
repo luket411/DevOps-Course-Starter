@@ -13,7 +13,7 @@
       <ul class="list-group mb-4">
         {% for item in open_items %}
             <li>
-              {{item}}
+              #{{item['id']}} {{item['status']}} - {{item['title']}}
             </li>
          {% endfor %}
       </ul>
@@ -22,7 +22,7 @@
       <ul class="list-group mb-4">
         {% for item in complete_items %}
             <li>
-              {{item}}
+              #{{item['id']}} {{item['status']}} - {{item['title']}}
             </li>
          {% endfor %}
       </ul>
