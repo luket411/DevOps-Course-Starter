@@ -4,7 +4,7 @@ from flask import render_template, request, redirect
 from dotenv import load_dotenv
 
 from todo_app.flask_config import Config
-from todo_app.data.trello_items import get_items, add_item
+from todo_app.data.trello_items import get_items, add_item, close_trello_item, reopen_trello_item
 
 load_dotenv()
 
@@ -22,4 +22,14 @@ def index():
 @app.route('/', methods=['POST'])
 def create_item():
     add_item(request.form.get('title'))
+    return redirect("/")
+
+@app.route('/complete-item/<id>')
+def complete_item(id):
+    close_trello_item(id)
+    return redirect("/")
+
+@app.route('/reopen-item/<id>')
+def reopen_item(id):
+    reopen_trello_item(id)
     return redirect("/")

@@ -61,7 +61,8 @@ def parse_trello_response(response):
             cards.append({
             "status":list_status,
             "id":translate_ticket_id(card["id"]),
-            "title":card["name"]
+            "title":card["name"],
+            "trello_id":card["id"]
             })
     
     return cards
@@ -95,6 +96,7 @@ def get_items():
     """
     response = update_from_trello()
     cards = parse_trello_response(response)
+    session["cards"] = cards
 
     return cards
 
@@ -152,11 +154,39 @@ def add_item(title):
     return
 
 
-def save_item(item):
-    """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
+def change_ticket_request(card_trello_id, target_list):
+    url = f"https://api.trello.com/1/cards/{card_trello_id}"
 
-    Args:
-        item: The item to save.
-    """
-    return
+    headers = {
+        "Accept": "application/json"
+    }
+
+    query = {
+        'idList': target_list,
+        'key': TRELLO_KEY,
+        'token': TRELLO_TOKEN
+    }
+
+    request(
+        "PUT",
+        url,
+        headers=headers,
+        params=query,
+        verify=False
+    ).raise_for_status() 
+
+
+def close_trello_item(id):
+    for card in session.get("cards"):
+        if card["id"] == int(id):
+            break
+
+    change_ticket_request(card["trello_id"], session["list_ids"]["Done"])
+
+
+def reopen_trello_item(id):
+    for card in session.get("cards"):
+        if card["id"] == int(id):
+            break
+
+    change_ticket_request(card["trello_id"], session["list_ids"]["To Do"])
