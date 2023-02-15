@@ -128,9 +128,27 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
+    url = "https://api.trello.com/1/cards"
 
+    headers = {
+        "Accept": "application/json"
+    }
 
-    # Determine the ID for the item based on that of the previously added item
+    query = {
+        'name': title,
+        'idList': session["list_ids"]["To Do"],
+        'key': TRELLO_KEY,
+        'token': TRELLO_TOKEN
+    }
+
+    request(
+        "POST",
+        url,
+        headers=headers,
+        params=query,
+        verify=False
+    ).raise_for_status() 
+
     return
 
 
