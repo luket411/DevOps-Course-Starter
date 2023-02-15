@@ -1,5 +1,6 @@
 from requests import request
 from os import environ
+from flask import session
 
 TRELLO_KEY = environ["TRELLO_KEY"]
 TRELLO_TOKEN = environ["TRELLO_TOKEN"]
@@ -53,11 +54,30 @@ def parse_trello_response(response):
         for card in trello_list["cards"]:
             cards.append({
             "status":list_status,
-            "id":card["id"],
+            "id":translate_ticket_id(card["id"]),
             "title":card["name"]
             })
     
     return cards
+
+
+def translate_ticket_id(ticket_id):
+    """Accepts trello ticket_ids and maps them to a human readable ID that can be shown to the user
+
+    Args:
+        int: human readable ticket id 
+    """
+    ticket_map = session.get("ticket_map",{})
+
+    if ticket_id not in ticket_map:
+        
+        new_id = session.get("next_ticket_id", 1)
+        ticket_map[ticket_id] = new_id
+
+        session["next_ticket_id"] = new_id + 1
+        session["ticket_map"] = ticket_map
+
+    return ticket_map[ticket_id]
 
 
 def get_items():
