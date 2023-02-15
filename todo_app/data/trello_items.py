@@ -5,13 +5,11 @@ TRELLO_KEY = environ["TRELLO_KEY"]
 TRELLO_TOKEN = environ["TRELLO_TOKEN"]
 TRELLO_BOARD_ID = environ["TRELLO_BOARD_ID"]
 
-
-def get_items():
+def update_from_trello():
     """
-    Fetches all saved items from the session.
-
+    Fetches all ticket information from Trello
     Returns:
-        list: The list of saved items.
+        dict: json response from trello
     """
     url= f"https://api.trello.com/1/boards/{TRELLO_BOARD_ID}/lists"
 
@@ -27,10 +25,26 @@ def get_items():
 
     response = request(
         "GET",
-        url,
-        headers=headers,
-        params=query
+        url, 
+        headers=headers, 
+        params=query, 
+        verify=False # This is just to get past the corporate proxy I am developing on. I understand not to use this flag if this were production software.
     ).json()
+  
+    return response
+
+
+def parse_trello_response(response):
+    """ Parses trello response into a list of dictionaries with the form 
+    {
+        "title":<CARD_NAME>,
+        "id":<CARD_ID>,
+        "status":<TRELLO_LIST THAT CONTAINS CARD>
+    }
+
+    Args:
+        List: cards on the trello board
+    """
 
     cards = []
 
@@ -42,7 +56,22 @@ def get_items():
             "id":card["id"],
             "title":card["name"]
             })
+    
     return cards
+
+
+def get_items():
+    """
+    Fetches all saved items from the session.
+
+    Returns:
+        list: The list of saved items.
+    """
+    response = update_from_trello()
+    cards = parse_trello_response(response)
+
+    return cards
+
 
 def get_item(id):
     """
