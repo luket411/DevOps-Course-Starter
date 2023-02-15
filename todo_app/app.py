@@ -14,7 +14,7 @@ app.config.from_object(Config())
 
 @app.route('/', methods=['GET'])
 def index():
-        items = [f"#{item['id']} {item['status']} - {item['title']}" for item in get_items()]
+        items = [f"#{item['id']} {item['status']} - {item['title']}" for item in get_items() if item['status'] == "To Do"]
         return render_template('index.html', items=items)
 
 @app.route('/', methods=['POST'])
