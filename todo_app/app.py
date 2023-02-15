@@ -14,8 +14,10 @@ app.config.from_object(Config())
 
 @app.route('/', methods=['GET'])
 def index():
-        items = [f"#{item['id']} {item['status']} - {item['title']}" for item in get_items() if item['status'] == "To Do"]
-        return render_template('index.html', items=items)
+    all_items = get_items()
+    open_items = [f"#{item['id']} {item['status']} - {item['title']}" for item in all_items if item['status'] == "To Do"]
+    completed_items = [f"#{item['id']} {item['status']} - {item['title']}" for item in all_items if item['status'] == "Done"]
+    return render_template('index.html', open_items=open_items, complete_items=completed_items)
 
 @app.route('/', methods=['POST'])
 def create_item():
