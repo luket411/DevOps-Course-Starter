@@ -1,10 +1,12 @@
 from requests import request
 from os import environ
-from flask import session
+from todo_app.data.Item import Item
 
 TRELLO_KEY = environ["TRELLO_KEY"]
 TRELLO_TOKEN = environ["TRELLO_TOKEN"]
 TRELLO_BOARD_ID = environ["TRELLO_BOARD_ID"]
+
+list_ids={}
 
 def update_from_trello():
     """
@@ -39,64 +41,36 @@ def parse_trello_response(response):
     """ Parses trello response into a list of dictionaries with the form 
     {
         "title":<CARD_NAME>,
-        "id":<CARD_ID>,
+        "id":<CARD ID_SHORT>
         "status":<TRELLO_LIST THAT CONTAINS CARD>
+        "trello_id":<TRELLO_ID>
     }
 
     Args:
         List: cards on the trello board
     """
-
-    list_ids = session.get("list_ids", {})
     cards = []
 
     for trello_list in response:
         list_status = trello_list["name"]
 
-        if list_status not in list_ids:
-            list_ids[list_status] = trello_list["id"]
-            session["list_ids"] = list_ids
+        list_ids[list_status] = trello_list["id"]
 
         for card in trello_list["cards"]:
-            cards.append({
-            "status":list_status,
-            "id":translate_ticket_id(card["id"]),
-            "title":card["name"],
-            "trello_id":card["id"]
-            })
+            cards.append(Item.from_trello_card(card, trello_list))
     
     return cards
 
 
-def translate_ticket_id(ticket_id):
-    """Accepts trello ticket_ids and maps them to a human readable ID that can be shown to the user
-
-    Args:
-        int: human readable ticket id 
-    """
-    ticket_map = session.get("ticket_map",{})
-
-    if ticket_id not in ticket_map:
-        
-        new_id = session.get("next_ticket_id", 1)
-        ticket_map[ticket_id] = new_id
-
-        session["next_ticket_id"] = new_id + 1
-        session["ticket_map"] = ticket_map
-
-    return ticket_map[ticket_id]
-
-
 def get_items():
     """
-    Fetches all saved items from the session.
+    Fetches all saved items from trello.
 
     Returns:
         list: The list of saved items.
     """
     response = update_from_trello()
     cards = parse_trello_response(response)
-    session["cards"] = cards
 
     return cards
 
@@ -122,7 +96,7 @@ def get_item(id):
 
 def add_item(title):
     """
-    Adds a new item with the specified title to the session.
+    Adds a new item with the specified title to trello.
 
     Args:
         title: The title of the item.
@@ -138,23 +112,34 @@ def add_item(title):
 
     query = {
         'name': title,
-        'idList': session["list_ids"]["To Do"],
+        'idList': list_ids["To Do"],
         'key': TRELLO_KEY,
         'token': TRELLO_TOKEN
     }
 
-    request(
+    response = request(
         "POST",
         url,
         headers=headers,
         params=query,
         verify=False
-    ).raise_for_status() 
+    ).json() 
 
-    return
+    return response
 
 
-def change_ticket_request(card_trello_id, target_list):
+def change_ticket_list(card_trello_id, target_list):
+    """change ticket to new list
+
+    Args:
+        card_trello_id: id of ticket to change
+        target_list: list to move ticket to
+
+    Returns:
+        response
+    """
+    target_list_id = list_ids[target_list]
+
     url = f"https://api.trello.com/1/cards/{card_trello_id}"
 
     headers = {
@@ -162,31 +147,18 @@ def change_ticket_request(card_trello_id, target_list):
     }
 
     query = {
-        'idList': target_list,
+        'idList': target_list_id,
         'key': TRELLO_KEY,
         'token': TRELLO_TOKEN
     }
 
-    request(
+    response = request(
         "PUT",
         url,
         headers=headers,
         params=query,
         verify=False
-    ).raise_for_status() 
+    ).json()
 
-
-def close_trello_item(id):
-    for card in session.get("cards"):
-        if card["id"] == int(id):
-            break
-
-    change_ticket_request(card["trello_id"], session["list_ids"]["Done"])
-
-
-def reopen_trello_item(id):
-    for card in session.get("cards"):
-        if card["id"] == int(id):
-            break
-
-    change_ticket_request(card["trello_id"], session["list_ids"]["To Do"])
+    return response
+    

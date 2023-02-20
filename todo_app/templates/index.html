@@ -13,7 +13,7 @@
       <ul class="list-group mb-4">
         {% for item in open_items %}
             <li>
-              <a href="/complete-item/{{item['id']}}"> #{{item['id']}} {{item['status']}} </a> - {{item['title']}}
+              <a href="/complete-item/{{item.trello_id}}"> #{{item.id}} {{item.status}} </a> - {{item.name}}
             </li>
          {% endfor %}
       </ul>
@@ -22,7 +22,7 @@
       <ul class="list-group mb-4">
         {% for item in complete_items %}
             <li>
-              <a href="/reopen-item/{{item['id']}}"> #{{item['id']}} {{item['status']}} </a> - {{item['title']}}
+              <a href="/reopen-item/{{item.trello_id}}"> #{{item.id}} {{item.status}} </a> - {{item.name}}
             </li>
          {% endfor %}
       </ul>
