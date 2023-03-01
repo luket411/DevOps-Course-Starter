@@ -9,11 +9,20 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
+      <h2>Open Items</h2>
       <ul class="list-group mb-4">
-        {% for item in items %}
+        {% for item in open_items %}
             <li>
-              {{item}}
+              <a href="/complete-item/{{item.trello_id}}"> #{{item.id}} {{item.status}} </a> - {{item.name}}
+            </li>
+         {% endfor %}
+      </ul>
+
+      <h2>Closed Items</h2>
+      <ul class="list-group mb-4">
+        {% for item in complete_items %}
+            <li>
+              <a href="/reopen-item/{{item.trello_id}}"> #{{item.id}} {{item.status}} </a> - {{item.name}}
             </li>
          {% endfor %}
       </ul>
