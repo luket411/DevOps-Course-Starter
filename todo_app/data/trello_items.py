@@ -70,26 +70,6 @@ def get_items():
 
     return cards
 
-
-def get_item(id):
-    """
-    Fetches the saved item with the specified ID.
-
-    Args:
-        id: The ID of the item.
-
-    Returns:
-        item: The saved item, or None if no items match the specified ID.
-    """
-
-    items = get_items()
-    for item in items:
-        if item["id"] == id:
-            return item
-    
-    return None
-
-
 def add_item(title):
     """
     Adds a new item with the specified title to trello.
