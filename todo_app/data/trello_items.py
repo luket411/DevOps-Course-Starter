@@ -2,10 +2,6 @@ from requests import request
 from os import environ
 from todo_app.data.Item import Item
 
-TRELLO_KEY = environ["TRELLO_KEY"]
-TRELLO_TOKEN = environ["TRELLO_TOKEN"]
-TRELLO_BOARD_ID = environ["TRELLO_BOARD_ID"]
-
 list_ids={}
 
 def update_from_trello():
@@ -14,15 +10,15 @@ def update_from_trello():
     Returns:
         dict: json response from trello
     """
-    url= f"https://api.trello.com/1/boards/{TRELLO_BOARD_ID}/lists"
+    url= f"https://api.trello.com/1/boards/{environ['TRELLO_BOARD_ID']}/lists"
 
     headers = {
         "Accept": "application/json"
     }
 
     query = {
-        "key":TRELLO_KEY,
-        "token":TRELLO_TOKEN,
+        "key":environ["TRELLO_KEY"],
+        "token":environ["TRELLO_TOKEN"],
         "cards":"open"
         }
 
@@ -113,8 +109,8 @@ def add_item(title):
     query = {
         'name': title,
         'idList': list_ids["To Do"],
-        'key': TRELLO_KEY,
-        'token': TRELLO_TOKEN
+        'key': environ["TRELLO_KEY"],
+        'token': environ["TRELLO_TOKEN"]
     }
 
     response = request(
@@ -148,8 +144,8 @@ def change_ticket_list(card_trello_id, target_list):
 
     query = {
         'idList': target_list_id,
-        'key': TRELLO_KEY,
-        'token': TRELLO_TOKEN
+        'key': environ["TRELLO_KEY"],
+        'token': environ["TRELLO_TOKEN"]
     }
 
     response = request(
