@@ -40,7 +40,7 @@ Before the app can be used a trello board must be setup with a "To Do" list and 
 
 ## Running the App
 
-Once the all dependencies have been installed, start the Flask app in development mode within the Poetry environment by running:
+Once all the dependencies have been installed, start the Flask app in development mode within the Poetry environment by running:
 ```bash
 $ poetry run flask run
 ```
@@ -56,3 +56,10 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+## Running Tests
+
+Once all the dependencies have been installed, automated tests can be ran with
+```bash
+$ poetry run pytest tests/
+```
