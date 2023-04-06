@@ -1,19 +1,6 @@
 from todo_app.data.Item import Item
+from conftest import get_default_item_values
 import pytest
-
-def get_default_item_values(
-        short_id="mock_id",
-        name="mock_name",
-        trello_list="mock_status",
-        trello_id="mock_trello_id"
-    ):
-    return dict(
-        short_id=short_id,
-        name=name,
-        trello_list=trello_list,
-        trello_id=trello_id
-    )
-
 
 @pytest.mark.parametrize("param, attribute, value", 
     [
