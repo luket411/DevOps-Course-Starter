@@ -31,3 +31,40 @@ def get_default_item(**item):
     """
     return Item(**get_default_item_values(**item))
 
+
+base_json_response = """[
+    {
+        "id": "to_do_board_id",
+        "name": "To Do",
+        "cards":[
+            {
+                "id": "to_do_card_id",
+                "name": "to do card",
+                "idShort": 1
+            }
+        ]
+    },
+    {
+        "id": "doing_board_id",
+        "name": "Doing",
+        "cards":[
+            {
+                "id": "doing_card_id",
+                "name": "In progress card",
+                "idShort": 2
+            }
+        ]
+    },
+    {
+        "id": "done_board_id",
+        "name": "Done",
+        "cards":[
+            {
+                "id": "done_card_id",
+                "name": "Finished card",
+                "idShort": 3
+            }
+        ]
+    }
+]"""
+
