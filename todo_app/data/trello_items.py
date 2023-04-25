@@ -34,13 +34,7 @@ def update_from_trello():
 
 
 def parse_trello_response(response):
-    """ Parses trello response into a list of dictionaries with the form 
-    {
-        "title":<CARD_NAME>,
-        "id":<CARD ID_SHORT>
-        "status":<TRELLO_LIST THAT CONTAINS CARD>
-        "trello_id":<TRELLO_ID>
-    }
+    """ Parses trello response into a list of Item objects
 
     Args:
         List: cards on the trello board

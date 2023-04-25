@@ -8,3 +8,6 @@ class Item():
     @classmethod
     def from_trello_card(cls, card, list):
         return cls(card["name"], card["id"], card["idShort"], list["name"])
+
+    def __repr__(self) -> str:
+        return f"Item(name: {self.name}, trello_id: {self.trello_id}, id: {self.id}, status: {self.status})"
