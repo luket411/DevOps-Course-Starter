@@ -12,3 +12,4 @@ COPY .env.template .env
 COPY poetry.toml .
 COPY pyproject.toml .
 
+RUN /root/.local/bin/poetry install
