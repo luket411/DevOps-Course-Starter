@@ -1,6 +1,6 @@
 from todo_app.data.Item import Item
-import todo_app.data.trello_items
-from todo_app.data.trello_items import parse_trello_response, get_items
+import todo_app.data.trello_interface
+from todo_app.data.trello_interface import parse_trello_response, get_items
 import pytest
 from unittest import mock
 from json import loads
@@ -28,7 +28,7 @@ def test_parse_trello_response_reads_card_types(type, card_details):
 
 def test_get_items_updates_from_trello(monkeypatch):
     mock_update_from_trello = mock.MagicMock(return_value=loads(base_json_response))
-    monkeypatch.setattr(todo_app.data.trello_items, "update_from_trello", mock_update_from_trello)
+    monkeypatch.setattr(todo_app.data.trello_interface, "update_from_trello", mock_update_from_trello)
 
     _ = get_items()
 
@@ -36,8 +36,8 @@ def test_get_items_updates_from_trello(monkeypatch):
 
 def test_get_items_parses_trello_items(monkeypatch):
     mock_parse_trello_response = mock.MagicMock()
-    monkeypatch.setattr(todo_app.data.trello_items, "update_from_trello", mock.MagicMock())
-    monkeypatch.setattr(todo_app.data.trello_items, "parse_trello_response", mock_parse_trello_response)
+    monkeypatch.setattr(todo_app.data.trello_interface, "update_from_trello", mock.MagicMock())
+    monkeypatch.setattr(todo_app.data.trello_interface, "parse_trello_response", mock_parse_trello_response)
 
     parsed_items = get_items()
 

@@ -1,4 +1,4 @@
-from requests import request
+from requests import get, post, put
 from os import environ
 from todo_app.data.Item import Item
 
@@ -22,8 +22,7 @@ def update_from_trello():
         "cards":"open"
         }
 
-    response = request(
-        "GET",
+    response = get(
         url, 
         headers=headers, 
         params=query, 
@@ -87,8 +86,7 @@ def add_item(title):
         'token': environ["TRELLO_TOKEN"]
     }
 
-    response = request(
-        "POST",
+    response = post(
         url,
         headers=headers,
         params=query,
@@ -122,8 +120,7 @@ def change_ticket_list(card_trello_id, target_list):
         'token': environ["TRELLO_TOKEN"]
     }
 
-    response = request(
-        "PUT",
+    response = put(
         url,
         headers=headers,
         params=query,
