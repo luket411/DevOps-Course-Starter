@@ -1,0 +1,5 @@
+.git
+.vscode
+.venv
+.pytest_cache
+.env

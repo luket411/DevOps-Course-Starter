@@ -11,7 +11,6 @@ COPY poetry.toml .
 COPY pyproject.toml .
 RUN /root/.local/bin/poetry install
 
-COPY .env .env
 COPY todo_app/templates/*.html todo_app/templates/
 COPY todo_app/*.py todo_app/
 COPY todo_app/data/*.py todo_app/data/
