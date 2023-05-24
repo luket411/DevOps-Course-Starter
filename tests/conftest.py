@@ -1,5 +1,6 @@
 from typing import Dict
 from sys import path
+from re import findall
 path.append("/home/tal1yok/repos/devops_training/DevopsCourseRepo")
 from todo_app.data.Item import Item
 
@@ -546,3 +547,23 @@ sample_json_response = """[
     ]
   }
 ]"""
+
+
+def html_to_ticket_names(html_in):
+  """Takes a html page of the todo app and returns an array of open items and an array of closed items
+
+  Args:
+      html_in (str): html in
+      
+  Returns:
+      tickets ([[open_items],[closed_items]])
+  """
+  find_ticket_name = lambda tag: tag.split(">")[1].split("<")[0].strip()
+  
+  open_tickets_raw = findall("<a href=\"/complete-item/[\w]*\">\s[^<]*</a>", html_in)
+  closed_tickets_raw = findall("<a href=\"/reopen-item/[\w]*\">\s[^<]*</a>", html_in)
+  
+  open_tickets = [find_ticket_name(tag) for tag in open_tickets_raw]
+  closed_tickets = [find_ticket_name(tag) for tag in closed_tickets_raw]
+  
+  return [open_tickets, closed_tickets]
