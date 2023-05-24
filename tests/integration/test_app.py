@@ -23,12 +23,13 @@ class StubReponse():
     def json(self):
         return self.fake_response_data
 
-
 def stub(url, **params):
     
     known_responses = {
         f"https://api.trello.com/1/boards/{os.environ['TRELLO_BOARD_ID']}/lists": [
-            {'id': '123abc','name': 'Open','cards': [{'id': '456', 'name': 'Test card', "idShort": 1}]}],
+            {'id': '123abc','name': 'Doing','cards': [{'id': '123', 'name': 'Test card', "idShort": 1}]},
+            {'id': '456edf','name': 'To Do','cards': []},
+            {'id': '789ghi','name': 'Done','cards': []}],
         f"https://api.trello.com/1/cards": []
     }
     
@@ -42,10 +43,16 @@ def test_index_page(monkeypatch, client):
     monkeypatch.setattr(todo_app.data.trello_interface, 'get', stub)
     response = client.get('/')
     assert response.status_code == 200
-    assert "Test card" in response.data.decode()
+    assert "Test card" in response.data.decode(), f"string 'Test card' not in HTML"
 
-def test_create_item_post(monkeypatch, client):
-    monkeypatch.setattr(todo_app.app, 'redirect', lambda x: "")
+def test_create_item(monkeypatch, client):
+    # monkeypatch.setattr(todo_app.app, 'redirect', lambda x: "")
+    monkeypatch.setattr(todo_app.data.trello_interface, 'get', stub)
     monkeypatch.setattr(todo_app.data.trello_interface, 'post', stub)
-    response = client.post('/')
-    assert response.status_code == 200
+    
+    post_response = client.post('/')
+    
+    assert post_response.status_code == 302
+
+    
+
