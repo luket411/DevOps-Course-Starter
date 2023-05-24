@@ -2,9 +2,7 @@ from requests import get, post, put
 from os import environ
 from todo_app.data.Item import Item
 
-list_ids={}
-
-def update_from_trello():
+def update_from_trello(cards=True):
     """
     Fetches all ticket information from Trello
     Returns:
@@ -19,8 +17,10 @@ def update_from_trello():
     query = {
         "key":environ["TRELLO_KEY"],
         "token":environ["TRELLO_TOKEN"],
-        "cards":"open"
         }
+
+    if cards:
+        query["cards"] = "open"
 
     response = get(
         url, 
@@ -41,13 +41,10 @@ def parse_trello_response(response):
     cards = []
 
     for trello_list in response:
-        list_status = trello_list["name"]
-
-        list_ids[list_status] = trello_list["id"]
+        # list_status = trello_list["name"]
 
         for card in trello_list["cards"]:
             cards.append(Item.from_trello_card(card, trello_list))
-    
     return cards
 
 
@@ -62,6 +59,22 @@ def get_items():
     cards = parse_trello_response(response)
 
     return cards
+
+def get_list_ids():
+    """Gets list ids from trello
+    
+    Returns:
+        list_ids: dict that maps name of lists to trello list ids
+    
+    """
+    
+    trello_response = update_from_trello(cards=False)
+    
+    lists = {list["name"]:list["id"] for list in trello_response}
+    
+    return lists
+    
+    
 
 def add_item(title):
     """
@@ -79,19 +92,22 @@ def add_item(title):
         "Accept": "application/json"
     }
 
+    list_ids = get_list_ids()
+
     query = {
         'name': title,
-        'idList': list_ids["To Do"],
+        'idList': list_ids["Doing"],
         'key': environ["TRELLO_KEY"],
         'token': environ["TRELLO_TOKEN"]
     }
+
 
     response = post(
         url,
         headers=headers,
         params=query,
         verify=False
-    ).json() 
+    ).json()
 
     return response
 
@@ -106,6 +122,8 @@ def change_ticket_list(card_trello_id, target_list):
     Returns:
         response
     """
+    list_ids = get_list_ids()
+    
     target_list_id = list_ids[target_list]
 
     url = f"https://api.trello.com/1/cards/{card_trello_id}"
