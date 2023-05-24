@@ -12,7 +12,6 @@ def create_app():
     @app.route('/', methods=['GET'])
     def index():
         view_model = ViewModel(get_items())
-        print(view_model.items)
         return render_template('index.html', view_model=view_model)
 
     @app.route('/', methods=['POST'])
