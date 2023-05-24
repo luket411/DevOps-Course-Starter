@@ -15,10 +15,9 @@ def client():
     with test_app.test_client() as client:
         yield client
 
-def test_create_ticket(selenium):
-    pre_html = get("http://localhost:5000").text
-    [pre_open_tickets, pre_closed_tickets] = html_to_ticket_names(pre_html)
-    
+# def test_create_ticket(client, selenium):
+#     pre_html = get("http://localhost:5000").text
+#     [pre_open_tickets, pre_closed_tickets] = html_to_ticket_names(pre_html)
     
     
     

@@ -41,7 +41,6 @@ def parse_trello_response(response):
     cards = []
 
     for trello_list in response:
-        # list_status = trello_list["name"]
 
         for card in trello_list["cards"]:
             cards.append(Item.from_trello_card(card, trello_list))
