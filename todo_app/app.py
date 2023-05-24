@@ -27,7 +27,7 @@ def create_app():
 
     @app.route('/reopen-item/<id>')
     def reopen_item(id):
-        change_ticket_list(id, "To Do")
+        change_ticket_list(id, "Doing")
         return redirect("/")
     
     return app
