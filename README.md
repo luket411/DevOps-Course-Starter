@@ -59,7 +59,17 @@ Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser
 
 ## Running Tests
 
+### Automatic testing
+
 Once all the dependencies have been installed, automated tests can be ran with
 ```bash
 $ poetry run pytest tests/
+```
+
+### E2E Testing
+
+To run end to end tests that make changes to the Trello board, make sure you have your `.env` file setup and then run
+
+```bash
+$ poetry run pytest e2e_tests/
 ```
