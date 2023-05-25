@@ -66,7 +66,7 @@ Once all the dependencies have been installed, automated tests can be ran with
 $ poetry run pytest tests/
 ```
 
-### E2E Testing
+### E2E Testing (Not yet implemented)
 
 To run end to end tests that make changes to the Trello board, make sure you have your `.env` file setup and then run
 
