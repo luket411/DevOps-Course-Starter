@@ -15,7 +15,8 @@ RUN poetry install
 # Copy production files
 FROM base as production
 
-COPY todo_app/templates/*.html todo_app/templates/
+COPY todo_app/templates/layout.html todo_app/templates/
+COPY todo_app/templates/prod_index.html todo_app/templates/index.html
 COPY todo_app/*.py todo_app/
 COPY todo_app/data/*.py todo_app/data/
 
