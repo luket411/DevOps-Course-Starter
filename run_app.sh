@@ -5,4 +5,4 @@ docker run \
     --env http_proxy="http://localhost:3128" \
     --env https_proxy="http://localhost:3128" \
     --env-file .env \
-    todo-app
+    todo-app:latest
