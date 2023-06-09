@@ -71,8 +71,8 @@ def html_to_ticket_names(html_in):
   """
   find_ticket_name = lambda tag: tag.split(">")[1].split("<")[0].strip()
   
-  open_tickets_raw = findall("<a href=\"/complete-item/[\w]*\">\s[^<]*</a>", html_in)
-  closed_tickets_raw = findall("<a href=\"/reopen-item/[\w]*\">\s[^<]*</a>", html_in)
+  open_tickets_raw = findall(r"<a href=\"/complete-item/[\w]*\">\s[^<]*</a>", html_in)
+  closed_tickets_raw = findall(r"<a href=\"/reopen-item/[\w]*\">\s[^<]*</a>", html_in)
   
   open_tickets = [find_ticket_name(tag) for tag in open_tickets_raw]
   closed_tickets = [find_ticket_name(tag) for tag in closed_tickets_raw]
