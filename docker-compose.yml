@@ -14,7 +14,7 @@ services:
     profiles:
       - prod
 
-  develop:
+  development:
     build: 
       context: .
       dockerfile: Dockerfile
@@ -31,3 +31,15 @@ services:
     profiles:
       - dev
   
+  run_tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    image: todo_app:test
+    volumes:
+      - type: bind
+        source: ./todo_app
+        target: /app/todo_app
+    profiles:
+      - test

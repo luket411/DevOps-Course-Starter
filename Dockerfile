@@ -27,3 +27,12 @@ FROM base as development
 
 EXPOSE 5000
 CMD poetry run flask run --host 0.0.0.0
+
+FROM base as testing
+
+COPY tests/conftest.py tests/
+COPY tests/integration/*.py tests/integration/
+COPY tests/unit/*.py tests/unit/
+COPY .env.test .
+
+CMD poetry run pytest tests/
