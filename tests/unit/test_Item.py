@@ -1,5 +1,5 @@
 from todo_app.data.Item import Item
-from conftest import get_default_item_values
+from conftest import get_default_item
 import pytest
 
 @pytest.mark.parametrize("param, attribute, value", 
@@ -11,10 +11,7 @@ import pytest
     ])
 def test_create_item(param, attribute, value):
 
-    item_values = get_default_item_values()
-    item_values[param] = value
-
-    item = Item(**item_values)
+    item = get_default_item(**{param:value})
 
     assert item.__getattribute__(attribute) == value, f"Item.{attribute} not set to {value} correctly"
 
