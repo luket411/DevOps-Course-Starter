@@ -1,10 +1,8 @@
-from requests import request
+from requests import get, post, put
 from os import environ
 from todo_app.data.Item import Item
 
-list_ids={}
-
-def update_from_trello():
+def update_from_trello(cards=True):
     """
     Fetches all ticket information from Trello
     Returns:
@@ -19,11 +17,12 @@ def update_from_trello():
     query = {
         "key":environ["TRELLO_KEY"],
         "token":environ["TRELLO_TOKEN"],
-        "cards":"open"
         }
 
-    response = request(
-        "GET",
+    if cards:
+        query["cards"] = "open"
+
+    response = get(
         url, 
         headers=headers, 
         params=query, 
@@ -34,13 +33,7 @@ def update_from_trello():
 
 
 def parse_trello_response(response):
-    """ Parses trello response into a list of dictionaries with the form 
-    {
-        "title":<CARD_NAME>,
-        "id":<CARD ID_SHORT>
-        "status":<TRELLO_LIST THAT CONTAINS CARD>
-        "trello_id":<TRELLO_ID>
-    }
+    """ Parses trello response into a list of Item objects
 
     Args:
         List: cards on the trello board
@@ -48,13 +41,9 @@ def parse_trello_response(response):
     cards = []
 
     for trello_list in response:
-        list_status = trello_list["name"]
-
-        list_ids[list_status] = trello_list["id"]
 
         for card in trello_list["cards"]:
             cards.append(Item.from_trello_card(card, trello_list))
-    
     return cards
 
 
@@ -69,6 +58,22 @@ def get_items():
     cards = parse_trello_response(response)
 
     return cards
+
+def get_list_ids():
+    """Gets list ids from trello
+    
+    Returns:
+        list_ids: dict that maps name of lists to trello list ids
+    
+    """
+    
+    trello_response = update_from_trello(cards=False)
+    
+    lists = {list["name"]:list["id"] for list in trello_response}
+    
+    return lists
+    
+    
 
 def add_item(title):
     """
@@ -86,20 +91,22 @@ def add_item(title):
         "Accept": "application/json"
     }
 
+    list_ids = get_list_ids()
+
     query = {
         'name': title,
-        'idList': list_ids["To Do"],
+        'idList': list_ids["Doing"],
         'key': environ["TRELLO_KEY"],
         'token': environ["TRELLO_TOKEN"]
     }
 
-    response = request(
-        "POST",
+
+    response = post(
         url,
         headers=headers,
         params=query,
         verify=False
-    ).json() 
+    ).json()
 
     return response
 
@@ -114,6 +121,8 @@ def change_ticket_list(card_trello_id, target_list):
     Returns:
         response
     """
+    list_ids = get_list_ids()
+    
     target_list_id = list_ids[target_list]
 
     url = f"https://api.trello.com/1/cards/{card_trello_id}"
@@ -128,8 +137,7 @@ def change_ticket_list(card_trello_id, target_list):
         'token': environ["TRELLO_TOKEN"]
     }
 
-    response = request(
-        "PUT",
+    response = put(
         url,
         headers=headers,
         params=query,
