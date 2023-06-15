@@ -10,7 +10,7 @@ COPY poetry.toml .
 COPY pyproject.toml .
 
 # Install poetry dependencies
-RUN poetry install
+RUN poetry install --only main
 
 # Copy production files
 FROM base as production
@@ -25,14 +25,16 @@ CMD poetry run gunicorn --bind 0.0.0.0 "todo_app.app:create_app()"
 
 FROM base as development
 
+RUN poetry install
+
 EXPOSE 5000
 CMD poetry run flask run --host 0.0.0.0
 
 FROM base as testing
 
-COPY tests/conftest.py tests/
-COPY tests/integration/*.py tests/integration/
-COPY tests/unit/*.py tests/unit/
+RUN poetry install
+
+COPY tests tests
 COPY .env.test .
 
 CMD poetry run pytest tests/

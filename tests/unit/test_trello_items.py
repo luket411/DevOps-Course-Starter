@@ -9,7 +9,7 @@ from dotenv import load_dotenv, find_dotenv
 file_path = find_dotenv('.env.test')
 load_dotenv(file_path, override=True)
 
-from conftest import base_json_response
+from tests.conftest import base_json_response
 
 
 @pytest.mark.parametrize("type, card_details", [

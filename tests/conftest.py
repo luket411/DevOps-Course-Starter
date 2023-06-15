@@ -1,6 +1,6 @@
 from re import findall
 from sys import path
-path.append("/app")
+
 from todo_app.data.Item import Item
 
 def get_default_item(**item):
