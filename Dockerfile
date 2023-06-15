@@ -6,8 +6,7 @@ ENV PATH /root/.local/bin:$PATH
 
 # Make workspace
 WORKDIR /app
-COPY poetry.toml .
-COPY pyproject.toml .
+COPY poetry.toml pyproject.toml ./
 
 # Install poetry dependencies
 RUN poetry install --only main
