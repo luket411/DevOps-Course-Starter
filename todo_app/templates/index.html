@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}To-Do App{% endblock %}
+{% block title %}To-Do App {{ prod_flag }} {% endblock %}
 
 {% block content %}
   <div class="jumbotron">
-    <h1 class="display-4">To-Do App</h1>
+    <h1 class="display-4">To-Do App {{ prod_flag }} </h1>
     <p class="lead">Just another to-do app.</p>
   </div>
 

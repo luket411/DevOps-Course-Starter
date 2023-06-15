@@ -1,75 +1,66 @@
 # DevOps Apprenticeship: Project Exercise
 
-> If you are using GitPod for the project exercise (i.e. you cannot use your local machine) then you'll want to launch a VM using the [following link](https://gitpod.io/#https://github.com/CorndelWithSoftwire/DevOps-Course-Starter). Note this VM comes pre-setup with Python & Poetry pre-installed.
-
 ## System Requirements
 
-The project uses poetry for Python to create an isolated environment and manage package dependencies. To prepare your system, ensure you have an official distribution of Python version 3.7+ and install Poetry using one of the following commands (as instructed by the [poetry documentation](https://python-poetry.org/docs/#system-requirements)):
+### Docker installation
 
-### Poetry installation (Bash)
+This project uses docker to manage the dependencies and packages needed to run the app.
+To install docker follow the instructions on the docker website:
 
-```bash
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
-```
-
-### Poetry installation (PowerShell)
-
-```powershell
-(Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py -UseBasicParsing).Content | python -
-```
+[https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/)
 
 ## Dependencies
 
-The project uses a virtual environment to isolate package dependencies. To create the virtual environment and install required packages, run the following from your preferred shell:
+### Setting up Trello
 
-```bash
-$ poetry install
-```
+Before the app can be used a trello board must be setup with a "To Do" list and a "Done" list. The board ID must then be put in the [.env](./.env) file along with trello credentials.
+
+### Setting up .env
 
 You'll also need to clone a new `.env` file from the `.env.template` to store local configuration options. This is a one-time operation on first setup:
 
 ```bash
-$ cp .env.template .env  # (first time only)
+cp .env.template .env  # (first time only)
 ```
 
 The `.env` file is used by flask to set environment variables when running `flask run`. This enables things like development mode (which also enables features like hot reloading when you make a file change). There's also a [SECRET_KEY](https://flask.palletsprojects.com/en/1.1.x/config/#SECRET_KEY) variable which is used to encrypt the flask session cookie.
 
-## Setting up Trello
+In here is also where you should define the trello [BOARD_ID](./.env#L9) for your trello board and your [TRELLO_KEY](./.env#L11) and [TRELLO_TOKEN](./.env#L12) for your authentication.
 
-Before the app can be used a trello board must be setup with a "To Do" list and a "Done" list. The board ID must then be put in the .env file along with trello credentials.
+## Running the app
 
-## Running the App
+This project uses a set of docker images for production and deployment versions of the app. These images can be built using the [Dockerfile](Dockerfile) in the repository which will manage the installation of all dependencies for the project.
 
-Once all the dependencies have been installed, start the Flask app in development mode within the Poetry environment by running:
+To setup and run the app, use either the [production](#production) or [development](#development) commands and then visit [localhost:5800](http://localhost:5800).
+
+### Production
+
+To build and run the production version of the app, run the following command:
+
 ```bash
-$ poetry run flask run
+docker compose up production
 ```
 
-You should see output similar to the following:
+The production version of the app includes the source codes as a part of the image therefore requires rebuilding everytime a change has made. However this also means the app can be exported more easily.
+
+### Development
+
+To build and run the development version of the app, run the following command:
+
 ```bash
- * Serving Flask app "app" (lazy loading)
- * Environment: development
- * Debug mode: on
- * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
- * Restarting with fsevents reloader
- * Debugger is active!
- * Debugger PIN: 226-556-590
+docker compose up development
 ```
-Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+Unlike the production version, the development image does not contain source code and instead needs the [todo_app](./todo_app/) directory mounted to the container at run time. However this provides the benefit of not requiring the image to be rebuilt each time a change is made, making the speed of future development of the app much faster.
 
 ## Running Tests
 
-### Automatic testing
-
-Once all the dependencies have been installed, automated tests can be ran with
-```bash
-$ poetry run pytest tests/
-```
-
-### E2E Testing (Not yet implemented)
-
-To run end to end tests that make changes to the Trello board, make sure you have your `.env` file setup and then run
+Unit tests can also be ran with a similar docker target called "testing". The command to run these tests are:
 
 ```bash
-$ poetry run pytest e2e_tests/
+docker compose up testing
 ```
+
+## Running without Docker
+
+If you want to run the app or tests without docker, follow the [manual_dependency guide](./manual_dependencies.md).
