@@ -15,11 +15,8 @@ RUN poetry install --only main
 # Copy production files
 FROM base as production
 
-COPY todo_app/templates/layout.html todo_app/templates/
-COPY todo_app/templates/prod_index.html todo_app/templates/index.html
-COPY todo_app/*.py todo_app/
-COPY todo_app/data/*.py todo_app/data/
-
+COPY todo_app /app/todo_app
+ENV IS_PROD=1
 EXPOSE 8000
 CMD poetry run gunicorn --bind 0.0.0.0 "todo_app.app:create_app()"
 
@@ -34,7 +31,7 @@ FROM base as testing
 
 RUN poetry install
 
-COPY tests tests
+COPY tests /app/tests
 COPY .env.test .
 
 CMD poetry run pytest tests/
