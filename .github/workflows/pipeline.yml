@@ -8,5 +8,8 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             
-            - name: Hello World
-              run: echo Hello World
+            - name: Build 
+              run: docker compose build testing
+
+            - name: Run tests
+              run: docker compose up testing
