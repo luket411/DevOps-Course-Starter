@@ -8,6 +8,9 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             
+            - name: Setup .env
+              run: cp .env.template .env
+
             - name: Build Production
               run: docker compose build production
 
