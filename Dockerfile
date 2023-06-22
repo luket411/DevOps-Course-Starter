@@ -52,7 +52,7 @@ COPY .env.test .
 # Run unit tests
 CMD poetry run pytest tests/
 
-FROM testing as e2e_testing
+FROM base as e2e_testing
 
 # Installs google chrome to image
 RUN apt-get update && apt-get install -y curl unzip xvfb libxi6 libgconf-2-4 fonts-liberation
@@ -66,6 +66,9 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d .
 
 # Copy e2e tests
 COPY e2e_tests /app/e2e_tests
+
+# Simulate a production environment
+ENV IS_PROD=1
 
 # Run e2e tests
 CMD poetry run pytest e2e_tests
