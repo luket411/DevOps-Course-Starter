@@ -3,7 +3,7 @@ import pytest
 from todo_app.data.ViewModel import ViewModel
 from todo_app.data.Item import Item
 
-from conftest import get_default_item
+from tests.conftest import get_default_item
 
 
 def test_empty_ViewModel_can_be_constructed():

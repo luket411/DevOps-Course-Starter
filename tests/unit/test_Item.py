@@ -1,5 +1,5 @@
 from todo_app.data.Item import Item
-from conftest import get_default_item
+from tests.conftest import get_default_item
 import pytest
 
 

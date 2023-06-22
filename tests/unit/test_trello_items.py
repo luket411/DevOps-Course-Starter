@@ -1,4 +1,3 @@
-from conftest import base_json_response
 from todo_app.data.Item import Item
 import todo_app.data.trello_interface
 from todo_app.data.trello_interface import parse_trello_response, get_items, add_item, update_from_trello
@@ -9,6 +8,8 @@ from dotenv import load_dotenv, find_dotenv
 
 file_path = find_dotenv('.env.test')
 load_dotenv(file_path, override=True)
+
+from tests.conftest import base_json_response
 
 
 @pytest.mark.parametrize("type, card_details", [
