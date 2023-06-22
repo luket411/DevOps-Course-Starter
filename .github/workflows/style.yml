@@ -1,0 +1,21 @@
+name: Test
+on: [push]
+
+jobs:
+    build:
+        name: Run Style check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Build development container
+              run: docker compose build development
+
+            - name: Check todo_app/
+              run: docker compose run development poetry run pycodestyle todo_app/ --max-line-length=200
+            
+            - name: Check tests/
+              run: docker compose run development poetry run pycodestyle tests/ --max-line-length=200
+
+            - name: Check e2e_tests/
+              run: docker compose run development poetry run pycodestyle e2e_tests/ --max-line-length=200
