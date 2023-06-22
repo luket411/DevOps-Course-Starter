@@ -27,4 +27,4 @@ jobs:
               run: docker compose build e2e_testing
 
             - name: Run e2e tests
-              run: docker compose run -e TRELLO_TOKEN=$TRELLO_TOKEN -e TRELLO_KEY=$TRELLO_KEY -e SECRET_KEY=$SECRET_KEY e2e_testing
+              run: docker compose run -e TRELLO_TOKEN={{ secrets.TRELLO_TOKEN }} -e TRELLO_KEY={{ secrets.TRELLO_KEY }} -e SECRET_KEY={{  secrets.SECRET_KEY  }} e2e_testing
