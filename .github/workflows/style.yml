@@ -1,4 +1,4 @@
-name: Test
+name: Style Check
 on: [push]
 
 jobs:
