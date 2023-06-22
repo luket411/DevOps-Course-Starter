@@ -61,6 +61,12 @@ Unit tests can also be ran with a similar docker target called "testing". The co
 docker compose up testing
 ```
 
+For end to end tests, run
+
+```bash
+docker compose up e2e_testing
+```
+
 ## Running without Docker
 
 If you want to run the app or tests without docker, follow the [manual_dependency guide](./manual_dependencies.md).
