@@ -5,6 +5,8 @@ jobs:
     build:
         name: Run Style check
         runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
         steps:
             - uses: actions/checkout@v2
 
