@@ -13,6 +13,7 @@ services:
       - ".env"
     profiles:
       - prod
+    network_mode: "bridge"
 
   development:
     build: 
@@ -30,6 +31,7 @@ services:
         target: /app/todo_app
     profiles:
       - dev
+    network_mode: "bridge"
   
   testing:
     build:
@@ -43,3 +45,4 @@ services:
         target: /app/todo_app
     profiles:
       - test
+    network_mode: "bridge"
