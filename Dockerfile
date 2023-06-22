@@ -54,6 +54,9 @@ CMD poetry run pytest tests/
 
 FROM base as e2e_testing
 
+# Install development packages
+RUN poetry install
+
 # Installs google chrome to image
 RUN apt-get update && apt-get install -y curl unzip xvfb libxi6 libgconf-2-4 fonts-liberation
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb

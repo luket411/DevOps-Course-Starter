@@ -13,6 +13,18 @@ jobs:
 
             - name: Build test image
               run: docker compose build e2e_testing
+            
+            - name: Setup .env stub
+              run: cp .env.template .env
+
+            - name: Delete secret key
+              run: sed -i 's/SECRET_KEY=secret-key//g'
+
+            - name: Delete trello key
+              run: sed -i 's/TRELLO_KEY=<TRELLO_KEY>//g'
+            
+            - name: Delete trello token
+              run: sed -i 's/TRELLO_TOKEN=<TRELLO_TOKEN>//g'
 
             - name: Run e2e tests
-              run: docker compose run e2e_testing
+              run: docker compose run e2e_testing -e TRELLO_TOKEN=$TRELLO_TOKEN -e TRELLO_KEY=$TRELLO_KEY -e SECRET_KEY=$SECRET_KEY
