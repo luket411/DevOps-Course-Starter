@@ -8,6 +8,9 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
+            - name: Make .env stub
+              run: touch .env
+
             - name: Build development container
               run: docker compose build development
 
