@@ -15,13 +15,13 @@ jobs:
               run: cp .env.template .env
             
             - name: Delete secret key
-              run: sed -i 's/SECRET_KEY=secret-key//g'
+              run: sed -i 's/SECRET_KEY=secret-key//g' .env
             
             - name: Delete trello key
-              run: sed -i 's/TRELLO_KEY=<TRELLO_KEY>//g'
+              run: sed -i 's/TRELLO_KEY=<TRELLO_KEY>//g' .env
             
             - name: Delete trello token
-              run: sed -i 's/TRELLO_TOKEN=<TRELLO_TOKEN>//g'
+              run: sed -i 's/TRELLO_TOKEN=<TRELLO_TOKEN>//g' .env
             
             - name: Build test image
               run: docker compose build e2e_testing
