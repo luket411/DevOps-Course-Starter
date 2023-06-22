@@ -5,14 +5,18 @@ from todo_app.data.Item import Item
 
 from conftest import get_default_item
 
+
 def test_empty_ViewModel_can_be_constructed():
     vm = ViewModel([])
     assert vm.items == []
 
+
 def test_items_returns_all_items():
     open_item = get_default_item(name="some_open_item", trello_list="Open")
-    backlog_item = get_default_item(name="some_backlog_item", trello_list="To Do")
-    completed_item = get_default_item(name="some_completed_item", trello_list="Done")
+    backlog_item = get_default_item(
+        name="some_backlog_item", trello_list="To Do")
+    completed_item = get_default_item(
+        name="some_completed_item", trello_list="Done")
 
     model = ViewModel()
     model._backlog_items = [backlog_item]
@@ -23,8 +27,10 @@ def test_items_returns_all_items():
     assert backlog_item in model.items, "Backlog items not included in model.items"
     assert completed_item in model.items, "Completed items not included in model.items"
 
+
 def test_ViewModel_can_be_constructed():
-    items = [get_default_item(trello_list=category) for category in ["To Do", "Done", "Doing"]]
+    items = [get_default_item(trello_list=category)
+             for category in ["To Do", "Done", "Doing"]]
 
     try:
         vm = ViewModel(items)
@@ -47,10 +53,13 @@ def test_items_getters_return_all_items(category: str):
     # Assert
     assert returned_items == expected_items, f"ViewModel.{category}_items doesn't return {category}_items correctly"
 
+
 @pytest.mark.parametrize("trello_list, category", [("To Do", "backlog"), ("Done", "completed"), ("Doing", "open")])
 def test_categories_read(trello_list, category):
-    item = Item(name="item1", trello_id="1", short_id="1", trello_list=trello_list)
+    item = Item(name="item1", trello_id="1",
+                short_id="1", trello_list=trello_list)
 
     vm = ViewModel([item])
 
-    assert vm.__getattribute__(f"_{category}_items") == [item], f"{category}_items not set properly"
+    assert vm.__getattribute__(f"_{category}_items") == [
+        item], f"{category}_items not set properly"

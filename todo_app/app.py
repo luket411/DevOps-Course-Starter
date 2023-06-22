@@ -5,6 +5,7 @@ from todo_app.flask_config import Config
 from todo_app.data.trello_interface import get_items, add_item, change_ticket_list
 from todo_app.data.ViewModel import ViewModel
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config())
@@ -28,5 +29,5 @@ def create_app():
     def reopen_item(id):
         change_ticket_list(id, "Doing")
         return redirect("/")
-    
+
     return app
