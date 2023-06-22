@@ -34,3 +34,17 @@ COPY tests /app/tests
 COPY .env.test .
 
 CMD poetry run pytest tests/
+
+FROM testing as e2e_testing
+
+RUN apt-get update && apt-get install -y curl unzip xvfb libxi6 libgconf-2-4 fonts-liberation
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt install -y ./google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_current_amd64.deb
+
+RUN wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+RUN unzip /tmp/chromedriver.zip chromedriver -d .
+
+COPY e2e_tests /app/e2e_tests
+
+CMD poetry run pytest e2e_tests
