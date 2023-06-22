@@ -1,0 +1,44 @@
+version: '3'
+
+name: bcn-devopscourserepo
+
+services:
+  production:
+    extends:
+      file: docker-compose.yml
+      service: production
+    build:
+      dockerfile: Dockerfile
+      args:
+        START_POINT: "base_with_proxy"
+    image: todo-app:prod_proxy
+
+  development:
+    extends:
+      file: docker-compose.yml
+      service: development
+    build:
+      dockerfile: Dockerfile
+      args:
+        START_POINT: "base_with_proxy"
+    image: todo-app:dev_proxy
+
+  testing:
+    extends:
+      file: docker-compose.yml
+      service: testing
+    build:
+      dockerfile: Dockerfile
+      args:
+        START_POINT: "base_with_proxy"
+    image: todo-app:test_proxy
+
+  e2e_testing:
+    extends:
+      file: docker-compose.yml
+      service: e2e_testing
+    build:
+      dockerfile: Dockerfile
+      args:
+        START_POINT: "base_with_proxy"
+    image: todo-app:e2e_test_proxy

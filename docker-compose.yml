@@ -6,23 +6,24 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: todo_app:prod
+    image: todo-app:prod
     ports:
       - "5800:8000"
+    network_mode: "bridge"
     env_file:
       - ".env"
     profiles:
       - prod
-    network_mode: "bridge"
 
   development:
     build: 
       context: .
       dockerfile: Dockerfile
       target: development
-    image: todo_app:dev
+    image: todo-app:dev
     ports:
       - "5800:5000"
+    network_mode: "bridge"
     env_file:
       - ".env"
     volumes:
@@ -31,18 +32,32 @@ services:
         target: /app/todo_app
     profiles:
       - dev
-    network_mode: "bridge"
   
   testing:
     build:
       context: .
       dockerfile: Dockerfile
       target: testing
-    image: todo_app:test
+    image: todo-app:test
     volumes:
       - type: bind
         source: ./todo_app
         target: /app/todo_app
     profiles:
       - test
+
+  e2e_testing:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: e2e_testing
+    image: todo-app:e2e_test
+    volumes:
+      - type: bind
+        source: ./todo_app
+        target: /app/todo_app
+    env_file:
+      - ".env"
+    profiles:
+      - e2e_test
     network_mode: "bridge"
