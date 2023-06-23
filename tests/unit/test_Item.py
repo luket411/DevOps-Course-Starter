@@ -41,6 +41,3 @@ def test_from_trello_card(attribute, expected_value, card_changes, list_changes)
 
     assert item.__getattribute__(
         attribute) == expected_value, f"Item.{attribute} not set to {expected_value}"
-
-def test_fail():
-    pytest.fail()
