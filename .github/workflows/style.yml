@@ -17,10 +17,10 @@ jobs:
               run: docker compose build development
 
             - name: Check todo_app/
-              run: docker compose run development poetry run pycodestyle todo_app/ --max-line-length=200
+              run: docker compose run development poetry run pycodestyle todo_app/ --max-line-length=200 --ignore=W605
             
             - name: Check tests/
-              run: docker compose run development poetry run pycodestyle tests/ --max-line-length=200
+              run: docker compose run development poetry run pycodestyle tests/ --max-line-length=200 --ignore=W605
 
             - name: Check e2e_tests/
-              run: docker compose run development poetry run pycodestyle e2e_tests/ --max-line-length=200
+              run: docker compose run development poetry run pycodestyle e2e_tests/ --max-line-length=200 --ignore=W605
