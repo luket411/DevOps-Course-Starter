@@ -70,7 +70,8 @@ def html_to_ticket_names(html_in):
     Returns:
         tickets ([[open_items],[closed_items]])
     """
-    def find_ticket_name(tag): return tag.split(">")[1].split("<")[0].strip()
+    def find_ticket_name(tag):
+        return tag.split(">")[1].split("<")[0].strip()
 
     open_tickets_raw = findall(
         "<a href=\"/complete-item/[\w]*\">\s[^<]*</a>", html_in)

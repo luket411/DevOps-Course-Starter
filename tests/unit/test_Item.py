@@ -3,13 +3,13 @@ from tests.conftest import get_default_item
 import pytest
 
 
-@pytest.mark.parametrize("param, attribute, value",
-                         [
-                             ("name",        "name",         "some_name"),
-                             ("trello_id",   "trello_id",    "some_trello_id"),
-                             ("short_id",    "id",           "some_id"),
-                             ("trello_list", "status",       "some_status")
-                         ])
+@pytest.mark.parametrize("param, attribute, value", [
+    ("name", "name", "some_name"),
+    ("trello_id", "trello_id", "some_trello_id"),
+    ("short_id", "id", "some_id"),
+    ("trello_list", "status", "some_status")
+]
+)
 def test_create_item(param, attribute, value):
 
     item = get_default_item(**{param: value})
