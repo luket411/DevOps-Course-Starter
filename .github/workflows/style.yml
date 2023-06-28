@@ -17,10 +17,10 @@ jobs:
               run: touch .env
 
             - name: Check todo_app/
-              run: docker compose run linter poetry run pycodestyle --max-line-length=200 --ignore=W605 todo_app
+              run: docker compose run linter poetry run pycodestyle --max-line-length=200 todo_app
             
             - name: Check tests/
-              run: docker compose run linter poetry run pycodestyle --max-line-length=200 --ignore=W605 tests
+              run: docker compose run linter poetry run pycodestyle --max-line-length=200 tests
 
             - name: Check e2e_tests/
-              run: docker compose run linter poetry run pycodestyle --max-line-length=200 --ignore=W605 e2e_tests
+              run: docker compose run linter poetry run pycodestyle --max-line-length=200 e2e_tests
