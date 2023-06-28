@@ -2,12 +2,12 @@ ARG BASE_IMAGE=python:3.12.0a7-buster
 ARG START_POINT=${BASE_IMAGE}
 
 # if "base_with_proxy" is passed as build arg, then proxy vars get exported for the image, else they dont.
-FROM ${BASE_IMAGE} as base_with_proxy
+FROM --platform=linux/amd64 ${BASE_IMAGE} as base_with_proxy
 
 ENV http_proxy="http://172.17.0.1:3128"
 ENV https_proxy="http://172.17.0.1:3128"
 
-FROM ${START_POINT} as base
+FROM --platform=linux/amd64 ${START_POINT} as base
 
 # Install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
