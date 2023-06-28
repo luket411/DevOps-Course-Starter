@@ -68,10 +68,26 @@ Once all the dependencies have been installed, automated tests can be ran with
 poetry run pytest tests/
 ```
 
-### E2E Testing,
+### E2E Testing
 
 To run end to end tests that make changes to the Trello board, make sure you have your `.env` file setup and then run
 
 ```bash
 poetry run pytest e2e_tests/
+```
+
+### Run linter
+
+To run the python linter
+
+```bash
+poetry run autopep8 -r -i --max-line-length=200 --ignore-local-config .
+```
+
+### Run style checker
+
+To run the style checker, run,
+
+```bash
+poetry run pycodestyle --max-line-length=200 --exclude=.venv,__pycache__,.pytest_cache .
 ```
