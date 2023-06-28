@@ -8,7 +8,6 @@ services:
       file: docker-compose.yml
       service: production
     build:
-      dockerfile: Dockerfile
       args:
         START_POINT: "base_with_proxy"
     image: todo-app:prod_proxy
@@ -18,7 +17,6 @@ services:
       file: docker-compose.yml
       service: development
     build:
-      dockerfile: Dockerfile
       args:
         START_POINT: "base_with_proxy"
     image: todo-app:dev_proxy
@@ -28,7 +26,6 @@ services:
       file: docker-compose.yml
       service: testing
     build:
-      dockerfile: Dockerfile
       args:
         START_POINT: "base_with_proxy"
     image: todo-app:test_proxy
@@ -38,7 +35,15 @@ services:
       file: docker-compose.yml
       service: e2e_testing
     build:
-      dockerfile: Dockerfile
       args:
         START_POINT: "base_with_proxy"
     image: todo-app:e2e_test_proxy
+
+  linter:
+    extends:
+      file: docker-compose.yml
+      service: linter
+    build: 
+      args:
+        START_POINT: "base_with_proxy"
+    image: todo-app:dev_proxy

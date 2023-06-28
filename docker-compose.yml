@@ -61,3 +61,23 @@ services:
     profiles:
       - e2e_test
     network_mode: "bridge"
+  
+  linter:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: todo-app:dev
+    command: "poetry run autopep8 -r -i --max-line-length=200 --ignore-local-config ."
+    volumes:
+      - type: bind
+        source: ./todo_app
+        target: /app/todo_app
+      - type: bind
+        source: ./tests
+        target: /app/tests
+      - type: bind
+        source: ./e2e_tests
+        target: /app/e2e_tests
+    profiles:
+      - lint
