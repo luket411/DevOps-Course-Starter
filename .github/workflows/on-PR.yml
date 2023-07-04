@@ -1,12 +1,35 @@
-name: End 2 End tests
+name: PR Checks
 on:
   pull_request:
       branches:
           - main
 
-jobs:
+jobs:    
+    setup:
+        name: Setup
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Build base
+              run: docker compose build base
+  
     build:
+        name: Build
+        needs: [setup]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            
+            - name: Setup .env
+              run: cp .env.template .env
+
+            - name: Build Production
+              run: docker compose build production
+
+    e2e_tests:
         name: E2E tests
+        needs: [setup]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2

@@ -1,10 +1,18 @@
 version: '3'
 
 services:
-  production:
-    build:
+  base:
+    build: 
       context: .
       dockerfile: Dockerfile
+      target: base
+    image: todo-app:base
+    profiles:
+      - base
+
+  production:
+    extends: base
+    build:
       target: production
     image: todo-app:prod
     ports:
@@ -16,9 +24,8 @@ services:
       - prod
 
   development:
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    extends: base
+    build:
       target: development
     image: todo-app:dev
     ports:
@@ -34,9 +41,8 @@ services:
       - dev
   
   testing:
+    extends: base
     build:
-      context: .
-      dockerfile: Dockerfile
       target: testing
     image: todo-app:test
     volumes:
@@ -47,9 +53,8 @@ services:
       - test
 
   e2e_testing:
+    extends: base
     build:
-      context: .
-      dockerfile: Dockerfile
       target: e2e_testing
     image: todo-app:e2e_test
     volumes:
@@ -63,21 +68,20 @@ services:
     network_mode: "bridge"
   
   linter:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-      target: development
-    image: todo-app:dev
+    extends: development
     command: "poetry run autopep8 -r -i --max-line-length=200 --ignore-local-config ."
     volumes:
-      - type: bind
-        source: ./todo_app
-        target: /app/todo_app
       - type: bind
         source: ./tests
         target: /app/tests
       - type: bind
         source: ./e2e_tests
         target: /app/e2e_tests
+    profiles:
+      - lint
+
+  check-style:
+    extends: linter
+    command: "poetry run pycodestyle --max-line-length=200 todo_app tests e2e_tests"
     profiles:
       - lint

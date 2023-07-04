@@ -3,6 +3,15 @@ version: '3'
 name: bcn-devopscourserepo
 
 services:
+  base:
+    extends:
+      file: docker-compose.yml
+      service: base
+    build:
+      args:
+        START_POINT: "base_with_proxy"
+    image: todo_app:base_proxy
+
   production:
     extends:
       file: docker-compose.yml
@@ -47,3 +56,9 @@ services:
       args:
         START_POINT: "base_with_proxy"
     image: todo-app:dev_proxy
+
+  check-style:
+    extends: linter
+    command: "poetry run pycodestyle --max-line-length=200 todo_app tests e2e_tests"
+    profiles:
+      - lint

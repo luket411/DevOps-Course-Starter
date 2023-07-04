@@ -1,18 +1,19 @@
-name: Build
-on:
-  pull_request:
-      branches:
-          - main
+# name: Build
+# on:
+#   pull_request:
+#       branches:
+#           - main
 
-jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
+# jobs:
+#     build:
+#         name: Build
+#         runs-on: ubuntu-latest
+#         steps:
+#             - uses: actions/checkout@v2
             
-            - name: Setup .env
-              run: cp .env.template .env
+#             - name: Setup .env
+#               run: cp .env.template .env
 
-            - name: Build Production
-              run: docker compose build production
+#             - name: Build Production
+#               run: docker compose build production
+    
