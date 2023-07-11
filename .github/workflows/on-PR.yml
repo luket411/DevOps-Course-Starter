@@ -11,6 +11,9 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
+            - name: Make .env stub
+              run: touch .env
+
             - name: Build base
               run: docker compose build base
   

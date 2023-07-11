@@ -39,7 +39,7 @@ services:
         target: /app/todo_app
     profiles:
       - dev
-  
+
   testing:
     extends: base
     build:
@@ -66,22 +66,29 @@ services:
     profiles:
       - e2e_test
     network_mode: "bridge"
-  
+
   linter:
-    extends: development
+    extends: base
+    build:
+      target: development
     command: "poetry run autopep8 -r -i --max-line-length=200 --ignore-local-config ."
     volumes:
+      - type: bind
+        source: ./todo_app
+        target: /app/todo_app
       - type: bind
         source: ./tests
         target: /app/tests
       - type: bind
         source: ./e2e_tests
         target: /app/e2e_tests
+    image: todo_app:dev
     profiles:
       - lint
 
-  check-style:
+  check_style:
     extends: linter
     command: "poetry run pycodestyle --max-line-length=200 todo_app tests e2e_tests"
+    image: todo_app:dev
     profiles:
-      - lint
+      - check-style

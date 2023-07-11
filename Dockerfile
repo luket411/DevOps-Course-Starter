@@ -32,18 +32,17 @@ EXPOSE 8000
 # Sets gunicorn command to run
 CMD poetry run gunicorn --bind 0.0.0.0 "todo_app.app:create_app()"
 
-FROM base as development
+FROM base as full_install
 
 # Install development packages
 RUN poetry install
+
+FROM full_install as development
 
 EXPOSE 5000
 CMD poetry run flask run --host 0.0.0.0
 
-FROM base as testing
-
-# Install development packages
-RUN poetry install
+FROM full_install as testing
 
 # Copy unit tests to image
 COPY tests /app/tests
@@ -52,10 +51,7 @@ COPY .env.test .
 # Run unit tests
 CMD poetry run pytest tests/
 
-FROM base as e2e_testing
-
-# Install development packages
-RUN poetry install
+FROM full_install as e2e_testing
 
 # Installs google chrome to image
 RUN apt-get update && apt-get install -y curl unzip xvfb libxi6 libgconf-2-4 fonts-liberation
