@@ -1,7 +1,7 @@
 # DevOps Apprenticeship: Project Exercise
 
-![Tests](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/test.yml/badge.svg)
-![E2E_Tests](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/e2e_tests.yml/badge.svg)
+[![Commit checks](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/on-commit.yml/badge.svg?branch=main)](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/on-commit.yml)
+[![PR Checks](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/on-PR.yml/badge.svg?branch=main)](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/on-PR.yml)
 
 ## System Requirements
 
