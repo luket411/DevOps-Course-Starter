@@ -37,10 +37,10 @@ jobs:
             - uses: actions/checkout@v2
 
             - name: Build Docker image
-              run: docker compose build check-style
+              run: docker compose build check_style
 
             # - name: Make .env stub
             #   run: touch .env
 
             - name: Check style/
-              run: docker compose run check-style
+              run: docker compose run check_style
