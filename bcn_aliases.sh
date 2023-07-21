@@ -1,0 +1,1 @@
+alias bcn-compose="docker compose -f docker-compose.bcn.yml"

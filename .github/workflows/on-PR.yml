@@ -1,0 +1,42 @@
+name: PR Checks
+on:
+  pull_request:
+      branches:
+          - main
+
+jobs:    
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            
+            - name: Setup .env
+              run: cp .env.template .env
+
+            - name: Build Production
+              run: docker compose build production
+
+    e2e_tests:
+        name: E2E tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            
+            - name: Setup .env stub
+              run: cp .env.template .env
+            
+            - name: Delete secret key
+              run: sed -i 's/SECRET_KEY=secret-key//g' .env
+            
+            - name: Delete trello key
+              run: sed -i 's/TRELLO_KEY=<TRELLO_KEY>//g' .env
+            
+            - name: Delete trello token
+              run: sed -i 's/TRELLO_TOKEN=<TRELLO_TOKEN>//g' .env
+            
+            - name: Build test image
+              run: docker compose build e2e_testing
+
+            - name: Run e2e tests
+              run: docker compose run -e TRELLO_TOKEN=${{ secrets.TRELLO_TOKEN }} -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e SECRET_KEY=${{  secrets.SECRET_KEY  }} e2e_testing

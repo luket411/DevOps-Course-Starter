@@ -1,5 +1,8 @@
 # DevOps Apprenticeship: Project Exercise
 
+![Tests](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/test.yml/badge.svg)
+![E2E_Tests](https://github.com/luket411/DevOps-Course-Starter/actions/workflows/e2e_tests.yml/badge.svg)
+
 ## System Requirements
 
 ### Docker installation
@@ -61,6 +64,39 @@ Unit tests can also be ran with a similar docker target called "testing". The co
 docker compose up testing
 ```
 
+For end to end tests, run
+
+```bash
+docker compose up e2e_testing
+```
+
 ## Running without Docker
 
 If you want to run the app or tests without docker, follow the [manual_dependency guide](./manual_dependencies.md).
+
+## Run linter
+
+To run the linter, run the following,
+
+```bash
+docker compose up linter
+```
+
+This will run the `autopep8` linter on all items within the `todo_app/`, `tests/` and `e2e_tests/` directories.
+
+## Github Actions
+
+There are 4 pipelines set to run inside this repository. 2 from any push and 2 from PRs attempting to merge to main:
+
+- Tests
+  - Runs on any push
+  - Runs the command `docker compose up testing` to run unit tests found in the `tests/` directory
+- Style
+  - Runs on any push
+  - Runs the `pycodestyle` linter
+- e2e_test
+  - Runs on a PR into main
+  - Runs the command `docker compose up e2e_testing` to run end 2 end tests found in the `e2e_tests/` directory.
+- Build
+  - Runs on a PR into main
+  - Simple attempts to build the `production` service to double check that it builds

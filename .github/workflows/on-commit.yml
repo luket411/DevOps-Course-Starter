@@ -1,0 +1,29 @@
+name: Commit checks
+on: [push]
+
+jobs:
+    build:
+        name: Run Tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Build Tests
+              run: docker compose build testing
+
+            - name: Run tests
+              run: docker compose run testing
+
+    style-check:
+        name: Run Style check
+        runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Build Docker image
+              run: docker compose build check_style
+
+            - name: Check style/
+              run: docker compose run check_style
