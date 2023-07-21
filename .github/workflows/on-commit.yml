@@ -2,21 +2,8 @@ name: Commit checks
 on: [push]
 
 jobs:
-    setup:
-        name: Setup
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Make .env stub
-              run: touch .env
-
-            - name: Build base
-              run: docker compose build base
-
     build:
         name: Run Tests
-        needs: [setup]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -29,7 +16,6 @@ jobs:
 
     style-check:
         name: Run Style check
-        needs: [setup]
         runs-on: ubuntu-latest
         strategy:
           fail-fast: false
@@ -38,9 +24,6 @@ jobs:
 
             - name: Build Docker image
               run: docker compose build check_style
-
-            # - name: Make .env stub
-            #   run: touch .env
 
             - name: Check style/
               run: docker compose run check_style

@@ -5,18 +5,8 @@ on:
           - main
 
 jobs:    
-    setup:
-        name: Setup
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Build base
-              run: docker compose build base
-  
     build:
         name: Build
-        needs: [setup]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -29,7 +19,6 @@ jobs:
 
     e2e_tests:
         name: E2E tests
-        needs: [setup]
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
