@@ -55,7 +55,7 @@ services:
     build: 
       args:
         START_POINT: "base_with_proxy"
-    image: todo-app:dev_proxy
+    image: todo-app:full_install_proxy
 
   check_style:
     extends:
@@ -64,4 +64,4 @@ services:
     build: 
       args:
         START_POINT: "base_with_proxy"
-    image: todo-app:dev_proxy
+    image: todo-app:full_install_proxy
