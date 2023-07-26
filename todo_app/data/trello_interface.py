@@ -27,8 +27,8 @@ def update_from_trello(cards=True):
         url,
         headers=headers,
         params=query,
-        # This is just to get past the corporate proxy I am developing on. I understand not to use this flag if this were production software.
-        verify=False
+        # If the USE_SSL environment variable is set then SSL is used. By default it is not in order to work around a proxy server
+        verify="USE_SSL" in environ
     ).json()
 
     return response
@@ -106,7 +106,8 @@ def add_item(title):
         url,
         headers=headers,
         params=query,
-        verify=False
+        # If the USE_SSL environment variable is set then SSL is used. By default it is not in order to work around a proxy server
+        verify="USE_SSL" in environ
     ).json()
 
     return response
@@ -142,7 +143,8 @@ def change_ticket_list(card_trello_id, target_list):
         url,
         headers=headers,
         params=query,
-        verify=False
+        # If the USE_SSL environment variable is set then SSL is used. By default it is not in order to work around a proxy server
+        verify="USE_SSL" in environ
     ).json()
 
     return response

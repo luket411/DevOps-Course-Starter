@@ -5,7 +5,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-      target: base
+      target: full_install
     image: todo-app:base
     profiles:
       - base
@@ -23,6 +23,14 @@ services:
       - ".env"
     profiles:
       - prod
+ 
+  release:
+    extend: production
+    build:
+      target: release
+    image: todo-app
+    profiles:
+      - release
 
   development:
     build: 
@@ -94,6 +102,6 @@ services:
   check_style:
     extends: linter
     command: "poetry run pycodestyle --max-line-length=200 todo_app tests e2e_tests"
-    image: todo_app:dev
+    image: todo_app:full_install
     profiles:
       - check-style
