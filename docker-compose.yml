@@ -25,7 +25,7 @@ services:
       - prod
  
   release:
-    extend: production
+    extends: production
     build:
       target: release
     image: todo-app
