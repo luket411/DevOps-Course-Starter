@@ -112,8 +112,8 @@ To manually update this deployment there are two steps: Pushing a new container 
 1. To build and push the new container to docker hub, run the following commands
 
 ```sh
-docker compose build production
-docker tag todo-app:prod luket511/todo-app
+docker compose build release
+docker tag todo-app:release luket511/todo-app
 docker login
 docker push luket511/todo-app
 ```
