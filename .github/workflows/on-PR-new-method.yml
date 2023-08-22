@@ -1,0 +1,138 @@
+name: Full Checks New Method
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      branches:
+          - main
+
+jobs:
+    setup:
+      name: Build base
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Build with full install
+          run: docker compose build base
+
+        - name: Push built image
+          run: docker save --output="/tmp/base_image.tar" todo-app:base
+
+        - name: Upload artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: base_image
+            path: /tmp/base_image.tar
+
+    build:
+        name: Build
+        needs: setup
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+
+          - name: Download base image
+            uses: actions/download-artifact@v3
+            with:
+              name: base_image
+              path: /tmp
+          
+          - name: Load base image
+            run: docker load --input /tmp/base_image.tar
+          
+          - name: Setup .env
+            run: cp .env.template .env
+
+          - name: Build Production
+            run: docker compose build production
+
+    test:
+      name: Run Tests
+      needs: setup
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Download base image
+          uses: actions/download-artifact@v3
+          with:
+            name: base_image
+            path: /tmp
+        
+        - name: Load base image
+          run: docker load --input /tmp/base_image.tar
+
+        - name: Build Tests
+          run: docker compose build testing
+
+        - name: Run tests
+          run: docker compose run testing
+
+    e2e_tests:
+        name: E2E tests
+        needs: setup
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+
+          - name: Download base image
+            uses: actions/download-artifact@v3
+            with:
+              name: base_image
+              path: /tmp
+          
+          - name: Load base image
+            run: docker load --input /tmp/base_image.tar
+          
+          - name: Setup .env stub
+            run: cp .env.template .env
+          
+          - name: Delete secret key
+            run: sed -i 's/SECRET_KEY=secret-key//g' .env
+          
+          - name: Delete trello key
+            run: sed -i 's/TRELLO_KEY=<TRELLO_KEY>//g' .env
+          
+          - name: Delete trello token
+            run: sed -i 's/TRELLO_TOKEN=<TRELLO_TOKEN>//g' .env
+          
+          - name: Build test image
+            run: docker compose build e2e_testing
+
+          - name: Run e2e tests
+            run: docker compose run -e TRELLO_TOKEN=${{ secrets.TRELLO_TOKEN }} -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e SECRET_KEY=${{  secrets.SECRET_KEY  }} e2e_testing
+
+    style-check:
+        name: Run Style check
+        needs: setup
+        runs-on: ubuntu-latest
+        strategy:
+          fail-fast: false
+        steps:
+          - uses: actions/checkout@v2
+
+          - name: Download base image
+            uses: actions/download-artifact@v3
+            with:
+              name: base_image
+              path: /tmp
+          
+          - name: Load base image
+            run: docker load --input /tmp/base_image.tar
+
+          - name: Download base image
+            uses: actions/download-artifact@v3
+            with:
+              name: base_image
+              path: /tmp
+          
+          - name: Load base image
+            run: docker load --input /tmp/base_image.tar
+
+          - name: Build Docker image
+            run: docker compose build check_style
+
+          - name: Check style/
+            run: docker compose run check_style
