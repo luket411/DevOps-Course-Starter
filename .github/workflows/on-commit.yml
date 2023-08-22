@@ -2,11 +2,39 @@ name: Commit checks
 on: [push]
 
 jobs:
-    build:
-        name: Run Tests
+    setup:
+        name: Build base
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+
+            - name: Build with full install
+              run: docker compose build base
+
+            - name: Push built image
+              run: docker save --output="/tmp/base_image.tar" todo-app:base
+
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: base_image
+                path: /tmp/base_image.tar
+
+    test:
+        name: Run Tests
+        needs: setup
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Download base image
+              uses: actions/download-artifact@v3
+              with:
+                name: base_image
+                path: /tmp
+            
+            - name: Load base image
+              run: docker load --input /tmp/base_image.tar
 
             - name: Build Tests
               run: docker compose build testing
@@ -16,11 +44,21 @@ jobs:
 
     style-check:
         name: Run Style check
+        needs: setup
         runs-on: ubuntu-latest
         strategy:
           fail-fast: false
         steps:
             - uses: actions/checkout@v2
+
+            - name: Download base image
+              uses: actions/download-artifact@v3
+              with:
+                name: base_image
+                path: /tmp
+            
+            - name: Load base image
+              run: docker load --input /tmp/base_image.tar
 
             - name: Build Docker image
               run: docker compose build check_style
