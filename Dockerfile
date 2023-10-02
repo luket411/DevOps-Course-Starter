@@ -32,6 +32,10 @@ EXPOSE 8000
 # Sets gunicorn command to run
 CMD poetry run gunicorn --bind 0.0.0.0 "todo_app.app:create_app()"
 
+FROM production as release
+
+ENV USE_SSL=1
+
 FROM base as full_install
 
 # Install development packages

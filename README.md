@@ -100,3 +100,22 @@ There are 4 pipelines set to run inside this repository. 2 from any push and 2 f
 - Build
   - Runs on a PR into main
   - Simple attempts to build the `production` service to double check that it builds
+
+## Deployment
+
+The development container can also be found running at [luket-todo-app.azurewebsites.net](https://luket-todo-app.azurewebsites.net/).
+
+### Update deployment
+
+To manually update this deployment there are two steps: Pushing a new container to docker hub and performing a POST request to a webhook to trigger the new container to be used.
+
+1. To build and push the new container to docker hub, run the following commands
+
+```sh
+docker compose build release
+docker tag todo-app:release luket511/todo-app
+docker login
+docker push luket511/todo-app
+```
+
+2. To trigger the webhook to start using the new container, run the webhook URL. This can be found at the following [link](https://portal.azure.com/#@softwireacademy.onmicrosoft.com/resource/subscriptions/d33b95c7-af3c-4247-9661-aa96d47fccc0/resourceGroups/Cohort27_LukTay_ProjectExercise/providers/Microsoft.Web/sites/luket-todo-app/vstscd).
