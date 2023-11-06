@@ -1,4 +1,5 @@
-ARG BASE_IMAGE=python:3.12.0a7-buster
+ARG BASE_IMAGE=python:3.12.0-bullseye
+
 ARG START_POINT=${BASE_IMAGE}
 
 # if "base_with_proxy" is passed as build arg, then proxy vars get exported for the image, else they dont.
