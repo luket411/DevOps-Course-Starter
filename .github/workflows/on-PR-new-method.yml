@@ -122,15 +122,6 @@ jobs:
           - name: Load base image
             run: docker load --input /tmp/base_image.tar
 
-          - name: Download base image
-            uses: actions/download-artifact@v3
-            with:
-              name: base_image
-              path: /tmp
-          
-          - name: Load base image
-            run: docker load --input /tmp/base_image.tar
-
           - name: Build Docker image
             run: docker compose build check_style
 
