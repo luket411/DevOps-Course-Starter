@@ -2,7 +2,7 @@ name: Commit checks
 on: [push]
 
 jobs:
-    build:
+    test:
         name: Run Tests
         runs-on: ubuntu-latest
         steps:
